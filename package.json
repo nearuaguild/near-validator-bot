@@ -7,10 +7,8 @@
     "start": "nodemon index.js"
   },
   "dependencies": {
-    "@types/node-telegram-bot-api": "^0.57.6",
     "dotenv": "^16.0.3",
     "node-cron": "^3.0.2",
-    "node-fetch": "^3.3.0",
     "node-telegram-bot-api": "^0.61.0",
     "nodemon": "^2.0.20"
   }

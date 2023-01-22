@@ -8,8 +8,8 @@ const { sendMessage } = require("./botUtils.js");
 const POOL_ID = config.poolId;
 const ACCOUNT_ID = config.accountId;
 
-const DELEGATORS_COUNT = `near view ${ POOL_ID } get_accounts '{"from_index": 0, "limit": 500}' --accountId ${ ACCOUNT_ID } | grep -e "${ ACCOUNT_ID }" | wc -l`;
-const TOTAL_STAKE = `near view ${ POOL_ID } get_accounts '{"from_index": 0, "limit": 500}' --accountId ${ ACCOUNT_ID } | grep -e "staked_balance" | grep -v "unstaked_balance" | xargs`
+const DELEGATORS_COUNT = `cd .. & near view ${ POOL_ID } get_accounts '{"from_index": 0, "limit": 500}' --accountId ${ ACCOUNT_ID } | grep -e "${ ACCOUNT_ID }" | wc -l`;
+const TOTAL_STAKE = `cd .. & near view ${ POOL_ID } get_accounts '{"from_index": 0, "limit": 500}' --accountId ${ ACCOUNT_ID } | grep -e "staked_balance" | grep -v "unstaked_balance" | xargs`
 
 const state = {
   delegatorsCount: 0,
