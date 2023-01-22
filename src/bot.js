@@ -1,7 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 import config from "./config.js";
 
-export async function startBot() {
+async function startBot() {
   const bot = await new TelegramBot(config.botToken, { polling: true })
 
   bot.onText(/\/echo (.+)/, async (msg, match) => {
@@ -19,3 +19,5 @@ export async function startBot() {
 
   return bot
 }
+
+export default startBot;
