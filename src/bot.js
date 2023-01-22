@@ -1,5 +1,5 @@
-import TelegramBot from "node-telegram-bot-api";
-import config from "./config.js";
+const TelegramBot = require("node-telegram-bot-api");
+const { config } = require("./config.js");
 
 async function startBot() {
   const bot = await new TelegramBot(config.botToken, { polling: true })
@@ -20,4 +20,6 @@ async function startBot() {
   return bot
 }
 
-export default startBot;
+module.exports = {
+  startBot
+}

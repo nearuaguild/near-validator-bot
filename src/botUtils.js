@@ -1,12 +1,21 @@
-import config from "./config.js";
-import startBot from "./bot.js";
+const { startBot } = require("./bot");
+const { config } = require("./config.js");
 
-const bot = await startBot();
+let bot;
 
-async function sendMessage(text) {
-  await bot.sendMessage(config.channelId, text)
+async function initializeBot() {
+  bot = await startBot()
 }
 
-export default {
+async function sendMessage(text) {
+  await bot.sendMessage(config.channelId, text);
+}
+
+// export default {
+//   sendMessage
+// }
+
+module.exports = {
+  initializeBot,
   sendMessage
 }

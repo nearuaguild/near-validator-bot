@@ -1,8 +1,10 @@
-import cron from "node-cron";
-import getStatistic from "./src/getStatistic.js";
+const cron = require("node-cron");
+const { getStatistics } = require("./src/getStatistic");
+const { initializeBot } = require("./src/botUtils");
 
 (async () => {
+  await initializeBot();
   cron.schedule("* * * * *", async () => {
-    await getStatistic.getStatistics();
+    await getStatistics();
   });
 })()

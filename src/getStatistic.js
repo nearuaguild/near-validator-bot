@@ -1,6 +1,9 @@
-import { execSync } from "child_process";
-import config from "./config.js";
-import botUtils from "./botUtils.js";
+// import { execSync } from "child_process";
+// import config from "./config.js";
+// import botUtils from "./botUtils.js";
+const { execSync } = require("child_process");
+const { config } = require("./config.js");
+const { sendMessage } = require("./botUtils.js");
 
 const POOL_ID = config.poolId;
 const ACCOUNT_ID = config.accountId;
@@ -13,7 +16,7 @@ const state = {
   totalStake: 0,
 }
 
-export async function getStatistics() {
+async function getStatistics() {
   const delegatorsCount = execSync(DELEGATORS_COUNT);
   const totalStake = execSync(TOTAL_STAKE);
 
@@ -21,12 +24,12 @@ export async function getStatistics() {
   const totalStakeData = totalStake.toString();
 
   if (state.delegatorsCount !== delegatorsCountData) {
-    await botUtils.sendMessage('Updated delegators count: ' + delegatorsCountData);
+    await sendMessage('Updated delegators count: ' + delegatorsCountData);
     state.delegatorsCount = delegatorsCountData;
   }
 
   if (state.totalStake !== totalStakeData) {
-    await botUtils.sendMessage('Updated total stake: ', totalStakeData);
+    await sendMessage('Updated total stake: ', totalStakeData);
     console.log('totalStakeData', totalStakeData)
     console.log(totalStakeData.split('staked_balance: ').reduce((acc, current) => {
       acc += +current;
@@ -40,6 +43,6 @@ export async function getStatistics() {
   // console.error('stderr ', child.stderr);
 }
 
-export default {
+module.exports = {
   getStatistics
 }

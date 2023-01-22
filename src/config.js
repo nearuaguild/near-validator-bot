@@ -1,4 +1,4 @@
-import * as dotenv from "dotenv"
+const dotenv = require("dotenv");
 
 dotenv.config()
 
@@ -9,8 +9,8 @@ const config = {
   accountId: process.env.ACCOUNT_ID
 }
 
-export default config;
+// export default config;
 
-// module.exports = {
-//   config
-// };
+module.exports = {
+  config
+};
