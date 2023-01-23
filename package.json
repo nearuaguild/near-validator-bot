@@ -5,8 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon src/index.ts",
-    "build": "npx tsc",
-    "dist": "tsc -p ."
+    "build": "npx tsc"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
