@@ -5,7 +5,7 @@ const POOL_ID = config.poolId;
 const ACCOUNT_ID = config.accountId;
 const denom: number = 1000000000000000000000000;
 
-const DELEGATORS_COUNT = `near view ${POOL_ID} get_accounts '{"from_index": 0, "limit": 500}' --accountId ${ACCOUNT_ID} | grep -e "${ACCOUNT_ID}" | wc -l`;
+const DELEGATORS_COUNT = `near view ${POOL_ID} get_accounts '{"from_index": 0, "limit": 500}' --accountId ${ACCOUNT_ID} | grep -e "account_id" | wc -l`;
 const TOTAL_STAKE = `near view ${POOL_ID} get_accounts '{"from_index": 0, "limit": 500}' --accountId ${ACCOUNT_ID} | grep -e "staked_balance" | grep -v "unstaked_balance" | xargs`;
 // const CHUNKS_PRODUCED = `curl -s http://127.0.0.1:3030/metrics | grep near_validators_chunks_produced | grep ${POOL_ID}`;
 // const CHUNKS_EXPECTED = `curl -s http://127.0.0.1:3030/metrics | grep near_validators_chunks_expected | grep ${POOL_ID}`;
