@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div style="text-align: center;">
-  <h2 style="text-align: center;">Near Protocol | Server-Side</h2>
+  <h2 style="text-align: center;">Near Protocol Validator Bot</h2>
 
   <p style="text-align: center;">
     A working example of NodeJS server-side integration with Near Protocol smart-contract
