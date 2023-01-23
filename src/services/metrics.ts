@@ -1,6 +1,5 @@
 import { execSync } from "child_process";
-import config from "./config";
-import Bot from "./bot";
+import config from "../utils/config";
 
 const POOL_ID = config.poolId;
 const ACCOUNT_ID = config.accountId;
@@ -13,13 +12,13 @@ const TOTAL_STAKE = `near view ${POOL_ID} get_accounts '{"from_index": 0, "limit
 // const DAEMON_STATUS = `systemctl status $DAEMON |grep Active`
 // const PEERS = `curl -s http://127.0.0.1:3030/metrics | grep near_peer_connections_total | tail -n 1`
 
-interface StatisticsState {
+interface MetricsState {
   delegatorsCount: number,
   totalStake: number,
 }
 
-class Statistics {
-  state: StatisticsState = {
+class Metrics {
+  state: MetricsState = {
     delegatorsCount: 0,
     totalStake: 0,
   };
@@ -61,8 +60,8 @@ Delegators Count: ${delegatorsCount}
     `;
   }
 
-  async getStatistics(): Promise<void> {
-    const updatedData: Partial<StatisticsState> = {};
+  async getMetrics(): Promise<Partial<MetricsState>> {
+    const updatedData: Partial<MetricsState> = {};
 
     // const chunksExpected = execSync(TOTAL_STAKE);
     // const chunksProduced = execSync(TOTAL_STAKE);
@@ -79,22 +78,9 @@ Delegators Count: ${delegatorsCount}
       updatedData.totalStake = totalStake;
     }
 
-    if (updatedData.totalStake && updatedData.delegatorsCount) {
-      await Bot.sendMessage(`*Updated Fields:* 
-\\- Total stake: ${updatedData.totalStake} Near
-\\- Delegators count: ${updatedData.delegatorsCount}
-      `);
-    } else if (updatedData.totalStake || updatedData.delegatorsCount) {
-      if (updatedData.totalStake) {
-        await Bot.sendMessage('Updated total stake: ' + updatedData.totalStake);
-      }
-
-      if (updatedData.delegatorsCount) {
-        await Bot.sendMessage('Updated delegators count: ' + updatedData.delegatorsCount);
-      }
-    }
+    return updatedData;
   }
 }
 
-export default new Statistics();
+export default Metrics;
 

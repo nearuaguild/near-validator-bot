@@ -1,9 +1,14 @@
 import TelegramBot, { Message } from "node-telegram-bot-api";
-import config from "./config";
-import Statistics from "./statistics";
+import config from "../utils/config";
+import type Metrics from "./metrics";
 
 class Bot {
   public bot: TelegramBot | undefined;
+  public metrics: Metrics;
+
+  constructor(metrics: Metrics) {
+    this.metrics = metrics;
+  }
 
   async initializeBot(): Promise<void> {
     this.bot = await new TelegramBot(config.botToken, { polling: true });
@@ -13,7 +18,7 @@ class Bot {
       this.bot.onText(/\/delegators/, async (msg: Message, match: RegExpExecArray | null) => {
         const chatId = msg.chat.id;
         if (match) {
-          const resp = Statistics.getDelegatorsCount()
+          const resp = this.metrics.getDelegatorsCount()
 
           if (resp && this.bot) {
             await this.bot.sendMessage(chatId, `Your delegators count is: ${resp}`);
@@ -25,7 +30,7 @@ class Bot {
       this.bot.onText(/\/stake/, async (msg: Message, match: RegExpExecArray | null) => {
         const chatId = msg.chat.id;
         if (match) {
-          const resp = Statistics.getTotalStake()
+          const resp = this.metrics.getTotalStake()
 
           if (resp && this.bot) {
             await this.bot.sendMessage(chatId, `Your total stake is: ${resp}`);
@@ -37,7 +42,7 @@ class Bot {
       this.bot.onText(/\/all/, async (msg: Message, match: RegExpExecArray | null) => {
         const chatId = msg.chat.id;
         if (match) {
-          const resp = Statistics.getAll()
+          const resp = this.metrics.getAll()
 
           if (resp && this.bot) {
             await this.bot.sendMessage(chatId, resp);
@@ -56,4 +61,4 @@ class Bot {
   }
 }
 
-export default new Bot();
+export default Bot;
