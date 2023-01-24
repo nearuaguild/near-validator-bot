@@ -46,7 +46,7 @@ class Metrics {
     const delegatorsCountData = +delegatorsCount.toString().replace(/[\s,]/g, '');
 
     if (this.state.delegatorsCount !== delegatorsCountData) {
-      this.state.delegatorsCount = +delegatorsCountData;
+      this.state.delegatorsCount = delegatorsCountData;
     }
 
     return delegatorsCountData;
@@ -72,7 +72,7 @@ Delegators Count: ${delegatorsCount}
 
     const delegatorsCount = this.getDelegatorsCount();
     if (this.state.delegatorsCount !== delegatorsCount) {
-      updatedData.delegatorsCount = +delegatorsCount;
+      updatedData.delegatorsCount = delegatorsCount;
     }
 
     const totalStake = this.getTotalStake();

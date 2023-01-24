@@ -7,9 +7,11 @@ import Notification from "./services/notification";
   const metrics = new Metrics();
   const myBot = new Bot(metrics);
   await myBot.initializeBot();
+  const notification = new Notification(myBot, metrics);
 
+  await notification.handleChanges();
   cron.schedule("*/15 * * * *", async () => {
-    await new Notification(myBot, metrics).handleChanges();
+    await notification.handleChanges();
   });
   console.log('Everything is Fine!')
 })()
