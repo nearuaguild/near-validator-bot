@@ -24,6 +24,7 @@ class Metrics {
     delegatorsCount: 0,
     totalStake: 0,
   };
+  updatedData: Partial<MetricsState> = {};
 
   getTotalStake(): number {
     const totalStake = execSync(TOTAL_STAKE);
@@ -35,7 +36,8 @@ class Metrics {
     }, 0) / denom);
 
     if (this.state.totalStake !== calcTotalStake) {
-      this.state.delegatorsCount = calcTotalStake;
+      this.state.totalStake = calcTotalStake;
+      this.updatedData.totalStake = calcTotalStake;
     }
 
     return calcTotalStake;
@@ -47,6 +49,7 @@ class Metrics {
 
     if (this.state.delegatorsCount !== delegatorsCountData) {
       this.state.delegatorsCount = delegatorsCountData;
+      this.updatedData.delegatorsCount = delegatorsCountData;
     }
 
     return delegatorsCountData;
@@ -63,24 +66,21 @@ Delegators Count: ${delegatorsCount}
   }
 
   async getMetrics(): Promise<Partial<MetricsState>> {
-    const updatedData: Partial<MetricsState> = {};
-
     // const chunksExpected = execSync(TOTAL_STAKE);
     // const chunksProduced = execSync(TOTAL_STAKE);
 
     // const chunk = CHUNKS_EXPECTED;
 
     const delegatorsCount = this.getDelegatorsCount();
-    if (this.state.delegatorsCount !== delegatorsCount) {
-      updatedData.delegatorsCount = delegatorsCount;
-    }
-
+    console.log('delegatorsCount', this.state.delegatorsCount, delegatorsCount);
     const totalStake = this.getTotalStake();
-    if (this.state.totalStake !== totalStake) {
-      updatedData.totalStake = totalStake;
-    }
+    console.log('totalStake', this.state.totalStake, totalStake);
 
-    return updatedData;
+    console.log('this.updatedData', this.updatedData);
+
+    const newData = this.updatedData
+    this.updatedData = {};
+    return newData;
   }
 }
 
