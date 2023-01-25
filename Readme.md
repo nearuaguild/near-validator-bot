@@ -4,7 +4,7 @@
   <h2 style="text-align: center;">Near Protocol Validator Bot</h2>
 
   <p style="text-align: center;">
-    A working example of NodeJS server-side integration with Near Protocol smart-contract
+    A working example of NodeJS telegram bot integration with Near Protocol api to get your validator statistic in notification like delegators count, total delegation, uptime and alerts
     <br />
     <br />
     <a href="https://github.com/nearuaguild"> Explore other examples</a>
@@ -36,7 +36,7 @@
 ### Built With
 
 - [![NodeJS][node.js]](https://nodejs.org/en/)
-- [Near CLI](https://github.com/near/near-cli)
+- [near-api-js (v1.1.0)](https://github.com/near/near-api-js)
 
 ---
 
