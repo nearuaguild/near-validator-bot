@@ -52,9 +52,9 @@ class Metrics {
     return delegatorsCount;
   }
 
-  getAll(): string {
-    const totalStake = this.getTotalStake();
-    const delegatorsCount = this.getDelegatorsCount();
+  async getAll(): Promise<string> {
+    const totalStake = await this.getTotalStake();
+    const delegatorsCount = await this.getDelegatorsCount();
 
     return `
 Total Stake: ${totalStake}

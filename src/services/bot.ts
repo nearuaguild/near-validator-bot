@@ -42,7 +42,7 @@ class Bot {
       this.bot.onText(/\/all/, async (msg: Message, match: RegExpExecArray | null) => {
         const chatId = msg.chat.id;
         if (match) {
-          const resp = this.metrics.getAll()
+          const resp = await this.metrics.getAll()
 
           if (resp && this.bot) {
             await this.bot.sendMessage(chatId, resp);
