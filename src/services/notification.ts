@@ -14,17 +14,17 @@ export default class Notification {
     const updatedData = await this.metrics.getMetrics();
 
     if (updatedData.totalStake && updatedData.delegatorsCount) {
-      await this.bot.sendMessage(`*Updated Fields:* 
+      await this.bot.sendMessageChannel(`*Updated Fields:* 
 \\- Total stake: ${updatedData.totalStake} Near
 \\- Delegators count: ${updatedData.delegatorsCount}
     `);
     } else if (updatedData.totalStake || updatedData.delegatorsCount) {
       if (updatedData.totalStake) {
-        await this.bot.sendMessage('Updated total stake: ' + updatedData.totalStake);
+        await this.bot.sendMessageChannel('Updated total stake: ' + updatedData.totalStake);
       }
 
       if (updatedData.delegatorsCount) {
-        await this.bot.sendMessage('Updated delegators count: ' + updatedData.delegatorsCount);
+        await this.bot.sendMessageChannel('Updated delegators count: ' + updatedData.delegatorsCount);
       }
     }
   }

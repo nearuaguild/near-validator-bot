@@ -66,9 +66,10 @@ Delegators Count: ${delegatorsCount}
     const delegators = await this.contract.getAccounts();
 
     return delegators.reduce((acc, delegator) => {
-      const stake = (+delegator.staked_balance / denom).toFixed(1);
+      const stake = Math.floor(+delegator.staked_balance / denom);
+      const name = delegator.account_id.length >= 25 ? delegator.account_id.slice(0, 25) + '...' : delegator.account_id;
 
-      acc += `${delegator.account_id}: ${stake} Near \n`
+      acc += `- <b>${name}</b>: ${stake} Near \n`;
 
       return acc;
     }, ``)
@@ -82,7 +83,6 @@ Delegators Count: ${delegatorsCount}
 
     await this.getDelegatorsCount();
     await this.getTotalStake();
-
     const newData = this.updatedData
     this.updatedData = {};
     return newData;

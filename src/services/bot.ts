@@ -20,8 +20,8 @@ class Bot {
         if (match) {
           const resp = await this.metrics.getDelegatorsCount()
 
-          if (resp && this.bot) {
-            await this.bot.sendMessage(chatId, `Your delegators count is: ${resp}`);
+          if (resp) {
+            await this.sendMessageChat(chatId, `Your delegators count is: ${resp}`);
           }
         }
       });
@@ -32,8 +32,8 @@ class Bot {
         if (match) {
           const resp = await this.metrics.getTotalStake()
 
-          if (resp && this.bot) {
-            await this.bot.sendMessage(chatId, `Your total stake is: ${resp}`);
+          if (resp) {
+            await this.sendMessageChat(chatId, `Your total stake is: ${resp}`);
           }
         }
       });
@@ -44,8 +44,8 @@ class Bot {
         if (match) {
           const resp = await this.metrics.getAll()
 
-          if (resp && this.bot) {
-            await this.bot.sendMessage(chatId, resp);
+          if (resp) {
+            await this.sendMessageChat(chatId, resp);
           }
         }
       });
@@ -56,18 +56,26 @@ class Bot {
         if (match) {
           const resp = await this.metrics.getDelegators()
 
-          if (resp && this.bot) {
-            await this.bot.sendMessage(chatId, resp);
+          if (resp) {
+            await this.sendMessageChat(chatId, resp);
           }
         }
       });
     }
   }
 
-  async sendMessage(text: string): Promise<void> {
+  async sendMessageChannel(text: string): Promise<void> {
     if (this.bot) {
       await this.bot.sendMessage(config.channelId, text, {
         parse_mode: "MarkdownV2"
+      });
+    }
+  }
+
+  async sendMessageChat(chatId: number, text: string): Promise<void> {
+    if (this.bot) {
+      await this.bot.sendMessage(chatId, text, {
+        parse_mode: "HTML"
       });
     }
   }
