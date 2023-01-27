@@ -57,9 +57,21 @@ class Metrics {
     const delegatorsCount = await this.getDelegatorsCount();
 
     return `
-Total Stake: ${totalStake}
+Total Stake: ${totalStake} Near
 Delegators Count: ${delegatorsCount}
     `;
+  }
+
+  async getDelegators(): Promise<string> {
+    const delegators = await this.contract.getAccounts();
+
+    return delegators.reduce((acc, delegator) => {
+      const stake = (+delegator.staked_balance / denom).toFixed(1);
+
+      acc += `${delegator.account_id}: ${stake} Near \n`
+
+      return acc;
+    }, ``)
   }
 
   async getMetrics(): Promise<Partial<MetricsState>> {

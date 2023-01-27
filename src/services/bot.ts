@@ -49,6 +49,18 @@ class Bot {
           }
         }
       });
+
+      // Get who and how much delegated
+      this.bot.onText(/\/whoandhowmuch/, async (msg: Message, match: RegExpExecArray | null) => {
+        const chatId = msg.chat.id;
+        if (match) {
+          const resp = await this.metrics.getDelegators()
+
+          if (resp && this.bot) {
+            await this.bot.sendMessage(chatId, resp);
+          }
+        }
+      });
     }
   }
 

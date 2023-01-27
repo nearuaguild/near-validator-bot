@@ -5,6 +5,7 @@ import Notification from "./services/notification";
 import { ValidatorContract } from "./utils/validatorContract";
 import * as naj from "near-api-js";
 import { getNearConfig } from "./utils/nearConfig";
+import config from "./utils/config";
 
 async function initContract(): Promise<ValidatorContract> {
   const nearConfig = getNearConfig();
@@ -12,7 +13,7 @@ async function initContract(): Promise<ValidatorContract> {
   const near = await naj.connect(nearConfig);
 
   const account = await near.account("");
-  return new ValidatorContract(account, "nearuaguild.poolv1.near");
+  return new ValidatorContract(account, config.poolId);
 }
 
 (async () => {
