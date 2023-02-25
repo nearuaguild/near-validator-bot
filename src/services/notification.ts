@@ -12,20 +12,31 @@ export default class Notification {
 
   handleChanges = async () => {
     const updatedData = await this.metrics.getMetrics();
+    let updatedString = `*Updated Fields:*
+\\- Pool earnings: ${updatedData.poolEarnings} Near`;
 
-    if (updatedData.totalStake && updatedData.delegatorsCount) {
-      await this.bot.sendMessageChannel(`*Updated Fields:* 
-\\- Total stake: ${updatedData.totalStake} Near
-\\- Delegators count: ${updatedData.delegatorsCount}
-    `);
-    } else if (updatedData.totalStake || updatedData.delegatorsCount) {
-      if (updatedData.totalStake) {
-        await this.bot.sendMessageChannel('Updated total stake: ' + updatedData.totalStake);
-      }
-
-      if (updatedData.delegatorsCount) {
-        await this.bot.sendMessageChannel('Updated delegators count: ' + updatedData.delegatorsCount);
-      }
+    if (updatedData.totalStake) {
+      updatedString = `${updatedString}
+\\- Updated total stake: ${updatedData.totalStake} Near`
     }
+
+    if (updatedData.delegatorsCount) {
+      updatedString = `${updatedString}
+\\- Updated delegators count: ${updatedData.delegatorsCount}`
+    }
+
+    if (updatedData.uptime) {
+      updatedString = `${updatedString}
+\\- Uptime: ${updatedData.uptime}
+\\- Chunks produced: ${updatedData.chunksProduced} / Chunks expected: ${updatedData.chunksExpected}
+\\- Updated peers: ${updatedData.peers}`
+    }
+
+    if (updatedData.isActive) {
+      updatedString = `${updatedString}
+\\- Is node active: ${updatedData.isActive}`
+    }
+
+    await this.bot.sendMessageChannel(updatedString);
   }
 }

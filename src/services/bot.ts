@@ -1,4 +1,4 @@
-import TelegramBot, { Message } from "node-telegram-bot-api";
+import TelegramBot, { Message, ParseMode } from "node-telegram-bot-api";
 import config from "../utils/config";
 import type Metrics from "./metrics";
 
@@ -61,13 +61,25 @@ class Bot {
           }
         }
       });
+
+      // Get pool earnings
+      this.bot.onText(/\/poolearnings/, async (msg: Message, match: RegExpExecArray | null) => {
+        const chatId = msg.chat.id;
+        if (match) {
+          const resp = await this.metrics.getPoolEarnings()
+
+          if (resp) {
+            await this.sendMessageChat(chatId, resp);
+          }
+        }
+      });
     }
   }
 
-  async sendMessageChannel(text: string): Promise<void> {
+  async sendMessageChannel(text: string, parseMode: ParseMode = "MarkdownV2"): Promise<void> {
     if (this.bot) {
       await this.bot.sendMessage(config.channelId, text, {
-        parse_mode: "MarkdownV2"
+        parse_mode: parseMode
       });
     }
   }

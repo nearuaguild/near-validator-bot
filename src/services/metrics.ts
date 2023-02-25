@@ -1,21 +1,35 @@
+import axios from "axios";
 import type { ValidatorContract } from "../utils/validatorContract";
+// @ts-ignore
+import parsePrometheusTextFormat from "parse-prometheus-text-format";
 
 const denom: number = 1000000000000000000000000;
 
-// const CHUNKS_PRODUCED = `curl -s http://127.0.0.1:3030/metrics | grep near_validators_chunks_produced | grep ${POOL_ID}`;
-// const CHUNKS_EXPECTED = `curl -s http://127.0.0.1:3030/metrics | grep near_validators_chunks_expected | grep ${POOL_ID}`;
+const nodeMetricsURL = 'http://185.246.84.26:3030/metrics';
+
 // const DAEMON_STATUS = `systemctl status $DAEMON |grep Active`
-// const PEERS = `curl -s http://127.0.0.1:3030/metrics | grep near_peer_connections_total | tail -n 1`
 
 interface MetricsState {
   delegatorsCount: number,
   totalStake: number,
+  poolEarnings: string,
+  chunksProduced: number,
+  chunksExpected: number,
+  uptime: string,
+  peers: number,
+  isActive: boolean,
 }
 
 class Metrics {
   state: MetricsState = {
     delegatorsCount: 0,
     totalStake: 0,
+    poolEarnings: '0',
+    chunksProduced: 0,
+    chunksExpected: 0,
+    uptime: '0%',
+    peers: 0,
+    isActive: false,
   };
   updatedData: Partial<MetricsState> = {};
   contract: ValidatorContract;
@@ -52,13 +66,36 @@ class Metrics {
     return delegatorsCount;
   }
 
+  async getPoolEarnings(): Promise<string> {
+    const delegators = await this.contract.getAccounts();
+    const poolDelegation = delegators.find((delegator => delegator.account_id === "nearukraineguild.near"));
+
+    if (poolDelegation) {
+      const poolEarnings = (+poolDelegation.staked_balance / denom).toFixed(2);
+      this.updatedData.poolEarnings = poolEarnings.toString().replace('.', '\\.');
+      return poolEarnings;
+    }
+
+    return '0';
+  }
+
   async getAll(): Promise<string> {
-    const totalStake = await this.getTotalStake();
-    const delegatorsCount = await this.getDelegatorsCount();
+    const [totalStake, delegatorsCount, poolEarnings] = await Promise.all([this.getTotalStake(), this.getDelegatorsCount(), this.getPoolEarnings(), this.getNodeMetrics()]);
 
     return `
-Total Stake: ${totalStake} Near
-Delegators Count: ${delegatorsCount}
+<b>Pool metrics:</b>
+
+1. Total Stake: ${totalStake} Near
+2. Delegators Count: ${delegatorsCount}
+3. Pool earnings: ${poolEarnings} Near
+
+<b>Node metrics:</b>
+
+1. Uptime: ${this.state.uptime}
+2. Chunks produced: ${this.state.chunksProduced}
+3. Chunks expected: ${this.state.chunksExpected}
+4. Peers: ${this.state.peers}
+5. Is node active: ${this.state.isActive}
     `;
   }
 
@@ -66,26 +103,68 @@ Delegators Count: ${delegatorsCount}
     const delegators = await this.contract.getAccounts();
 
     return delegators.reduce((acc, delegator) => {
-      const stake = Math.floor(+delegator.staked_balance / denom);
-      const name = delegator.account_id.length >= 25 ? delegator.account_id.slice(0, 25) + '...' : delegator.account_id;
+      const stake = (+delegator.staked_balance / denom).toFixed(2);
+      const name = delegator.account_id.length >= 25 ? delegator.account_id.slice(0, 25) + "..." : delegator.account_id;
 
       acc += `- <b>${name}</b>: ${stake} Near \n`;
 
       return acc;
-    }, ``)
+    }, ``);
   }
 
   async getMetrics(): Promise<Partial<MetricsState>> {
-    // const chunksExpected = execSync(TOTAL_STAKE);
-    // const chunksProduced = execSync(TOTAL_STAKE);
+    await Promise.all([this.getTotalStake(), this.getDelegatorsCount(), this.getPoolEarnings(), this.getNodeMetrics()]);
 
-    // const chunk = CHUNKS_EXPECTED;
-
-    await this.getDelegatorsCount();
-    await this.getTotalStake();
-    const newData = this.updatedData
+    const newData = this.updatedData;
     this.updatedData = {};
     return newData;
+  }
+
+  async getNodeMetrics() {
+    const { data } = await axios.get(nodeMetricsURL);
+    const parsed = parsePrometheusTextFormat(data);
+
+    const isActive = !!parsed.find((obj: any) => obj.name === 'near_is_validator').metrics[0].value;
+
+    if (this.state.isActive !== isActive) {
+      this.state.isActive = isActive;
+      this.updatedData.isActive = isActive;
+    }
+
+    const chunksProduced = parsed
+      .find((obj: any) => obj.name === 'near_validators_chunks_produced')
+      .metrics
+      .find((obj: any) => obj.labels.account_id === 'nearuaguild.poolv1.near').value;
+
+    if (this.state.chunksProduced !== chunksProduced) {
+      this.state.chunksProduced = chunksProduced;
+      this.updatedData.chunksProduced = chunksProduced;
+    }
+
+    const chunksExpected = parsed
+      .find((obj: any) => obj.name === 'near_validators_chunks_expected')
+      .metrics
+      .find((obj: any) => obj.labels.account_id === 'nearuaguild.poolv1.near').value;
+
+    if (this.state.chunksExpected !== chunksExpected) {
+      this.state.chunksExpected = chunksExpected;
+      this.updatedData.chunksExpected = chunksExpected;
+    }
+
+    const uptime = this.state.chunksProduced / this.state.chunksExpected * 100 + '%'
+
+    if (this.state.uptime !== uptime) {
+      this.state.uptime = uptime;
+      this.updatedData.uptime = uptime;
+    }
+
+    const peers = parsed
+      .find((obj: any) => obj.name === 'near_peer_connections_total').metrics[0].value;
+
+    if (this.state.peers !== peers) {
+      this.state.peers = peers;
+      this.updatedData.peers = peers;
+    }
   }
 }
 
