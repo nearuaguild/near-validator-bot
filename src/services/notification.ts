@@ -12,8 +12,7 @@ export default class Notification {
 
   handleChanges = async () => {
     const updatedData = await this.metrics.getMetrics();
-    let updatedString = `*Updated Fields:*
-\\- Pool earnings: ${updatedData.poolEarnings} Near`;
+    let updatedString = ``;
 
     if (updatedData.totalStake) {
       updatedString = `${updatedString}
@@ -37,6 +36,11 @@ export default class Notification {
 \\- Is node active: ${updatedData.isActive}`
     }
 
-    await this.bot.sendMessageChannel(updatedString);
+    if (updatedString.length > 0) {
+      updatedString = `*Updated Fields:*
+\\- Pool earnings: ${updatedData.poolEarnings} Near${updatedString}`
+
+      await this.bot.sendMessageChannel(updatedString);
+    }
   }
 }
