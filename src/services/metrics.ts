@@ -151,7 +151,7 @@ class Metrics {
       this.updatedData.chunksExpected = chunksExpected;
     }
 
-    const uptime = this.state.chunksProduced / this.state.chunksExpected * 100 + '%'
+    const uptime = this.state.chunksExpected === 0 ? this.state.uptime : this.state.chunksProduced / this.state.chunksExpected * 100 + '%';
 
     if (this.state.uptime !== uptime) {
       this.state.uptime = uptime;
@@ -160,6 +160,12 @@ class Metrics {
 
     const peers = parsed
       .find((obj: any) => obj.name === 'near_peer_connections_total').metrics[0].value;
+
+    if (!peers) {
+      console.log('peers', peers, parsed
+        .find((obj: any) => obj.name === 'near_peer_connections_total'), parsed
+        .find((obj: any) => obj.name === 'near_peer_connections_total').metrics)
+    }
 
     if (this.state.peers !== peers) {
       this.state.peers = peers;
