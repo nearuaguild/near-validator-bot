@@ -24,7 +24,7 @@ export default class Notification {
 \\- Updated delegators count: ${updatedData.delegatorsCount}`
     }
 
-    if (updatedData.uptime && updatedData.chunksExpected != 0) {
+    if (updatedData.uptime && updatedData.chunksExpected != 0 && updatedData.peers) {
       updatedString = `${updatedString}
 \\- Uptime: ${updatedData.uptime}
 \\- Chunks produced: ${updatedData.chunksProduced} / Chunks expected: ${updatedData.chunksExpected}
