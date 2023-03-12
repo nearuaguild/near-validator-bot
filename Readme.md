@@ -7,6 +7,8 @@
     A working example of NodeJS telegram bot integration with Near Protocol api to get your validator statistic in notification like delegators count, total delegation, uptime and alerts
     <br />
     <br />
+    <a href="https://nearuaguild.github.io/near-validator-bot/#/">All bot commands</a>
+    .
     <a href="https://github.com/nearuaguild"> Explore other examples</a>
     ·
     <a href="https://github.com/nearuaguild/near-validator-bot/issues">Report Bug</a>
@@ -61,27 +63,49 @@ Follow these simple instructions to set up a local development environment
    ```sh
    yarn
    ```
-3. Copy the example env file to `.env` and change values for yours
+3. Create bot via [bot-father](https://telegram.me/BotFather) in telegram, add to your channel to get updates
+4. Copy the example env file to `.env` and change values for yours, like your channel id and bot id
    ```sh
    cp .env.example .env
    ```
-4. Build server
+5. Build server
    ```sh
    yarn build
    ```
-5. Launch application
+6. Launch application
    ```sh
    yarn start
    or
    pm2 start dist/index.js
    ```
+7. Get updated about your bot
 
 ---
 
+### State check every 10 mins by default, but you can modify it in .env file
+
+If everything is updated you will see next message:
+```
+Updated Fields:
+- Pool earnings: 0.43 Near
+- Updated total stake: 47314 Near
+- Updated delegators count: 8
+- Uptime: 100%
+- Chunks produced: 0 / Chunks expected: 0
+- Updated peers: 33
+- Is node active: true
+```
+But in general case you will receive updates only things that have changed, like:
+```
+Updated Fields:
+- Pool earnings: 7.19 Near
+- Updated total stake: 47350 Near
+```
+
+
 ### Available telegram bot commands
 
-```/all``` 
-
+Check [here](https://nearuaguild.github.io/near-validator-bot/#/)
 
 <!-- LICENSE -->
 

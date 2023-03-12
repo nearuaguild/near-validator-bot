@@ -23,7 +23,7 @@ async function initContract(): Promise<ValidatorContract> {
   await myBot.initializeBot();
   const notification = new Notification(myBot, metrics);
 
-  cron.schedule("*/10 * * * *", async () => {
+  cron.schedule(config.cronTime, async () => {
     await notification.handleChanges();
   });
   console.log('Everything is Fine!');

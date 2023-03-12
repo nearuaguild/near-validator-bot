@@ -7,6 +7,7 @@ interface ConfigFields {
   channelId: string,
   poolId: string,
   nodeUrl: string,
+  cronTime: string,
 }
 
 const config = validateConfig();
@@ -20,6 +21,7 @@ function validateConfig(): ConfigFields {
       channelId: process.env["CHANNEL_ID"],
       poolId: process.env["POOL_ID"],
       nodeUrl: process.env["NODE_URL"],
+      cronTime: process.env["CRON_TIME"] ? process.env["CRON_TIME"] : "*/10 * * * *",
     }
   }
 }
