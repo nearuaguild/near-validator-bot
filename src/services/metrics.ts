@@ -2,12 +2,11 @@ import axios from "axios";
 import type { ValidatorContract } from "../utils/validatorContract";
 // @ts-ignore
 import parsePrometheusTextFormat from "parse-prometheus-text-format";
+import config from "../utils/config";
 
 const denom: number = 1000000000000000000000000;
 
-const nodeMetricsURL = 'http://185.246.84.26:3030/metrics';
-
-// const DAEMON_STATUS = `systemctl status $DAEMON |grep Active`
+const nodeMetricsURL = `${config.nodeMetricsUrl}/metrics`;
 
 interface MetricsState {
   delegatorsCount: number,
@@ -68,7 +67,7 @@ class Metrics {
 
   async getPoolEarnings(): Promise<string> {
     const delegators = await this.contract.getAccounts();
-    const poolDelegation = delegators.find((delegator => delegator.account_id === "nearukraineguild.near"));
+    const poolDelegation = delegators.find((delegator => delegator.account_id === config.accountId));
 
     if (poolDelegation) {
       const poolEarnings = (+poolDelegation.staked_balance / denom).toFixed(2);
