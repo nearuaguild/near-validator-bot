@@ -33,7 +33,7 @@ class Bot {
           const resp = await this.metrics.getTotalStake()
 
           if (resp) {
-            await this.sendMessageChat(chatId, `Your total stake is: ${resp}`);
+            await this.sendMessageChat(chatId, `Your total stake is: ${resp} Near`);
           }
         }
       });

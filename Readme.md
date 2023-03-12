@@ -9,13 +9,13 @@
     <br />
     <a href="https://github.com/nearuaguild"> Explore other examples</a>
     ·
-    <a href="https://github.com/nearuaguild/near-server-side/issues">Report Bug</a>
+    <a href="https://github.com/nearuaguild/near-validator-bot/issues">Report Bug</a>
   </p>
 </div>
 
 ## Developed by
 
-![Near Ukrainians Guild cover](./images/cover.png)
+![Near Ukrainians Guild cover](./images/validator.png)
 
 **Near Ukrainians Guild** is a fast-growing guild aimed at providing high-quality educational content and assistance to grow a strong community of Ukrainian developers/entrepreneurs in the Near Protocol ecosystem
 
@@ -77,6 +77,11 @@ Follow these simple instructions to set up a local development environment
    ```
 
 ---
+
+### Available telegram bot commands
+
+```/all``` 
+
 
 <!-- LICENSE -->
 

@@ -73,10 +73,10 @@ class Metrics {
     if (poolDelegation) {
       const poolEarnings = (+poolDelegation.staked_balance / denom).toFixed(2);
       this.updatedData.poolEarnings = poolEarnings.toString().replace('.', '\\.');
-      return poolEarnings;
+      return poolEarnings + ' Near';
     }
 
-    return '0';
+    return '0 Near';
   }
 
   async getAll(): Promise<string> {

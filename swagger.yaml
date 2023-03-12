@@ -1,0 +1,126 @@
+openapi: 3.0.3
+info:
+  title: Near Protocol Bot Validating Telegram bot commands
+  description: >-
+    Telegram bot commands
+  contact:
+    email: hholynskyi@gmail.com
+  version: '0.6'
+externalDocs:
+  description: Find out more about Near Validator Telegram Bot
+  url: https://github.com/nearuaguild/near-validator-bot
+tags:
+  - name: bot
+    description: All telegram-bot commands and responses
+paths:
+  /all:
+    get:
+      tags:
+        - bot
+      summary: return all information about pool
+      description: >-
+        Return all data about your pool that bot can grab except delegators
+      operationId: all
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'Pool metrics:
+
+                1. Total Stake: 47350 Near
+
+                2. Delegators Count: 8
+
+                3. Pool earnings: 7.19 Near
+
+                Node metrics:
+                1. Uptime: 100%
+
+                2. Chunks produced: 6
+
+                3. Chunks expected: 6
+
+                4. Peers: 35
+
+                5. Is node active: true'
+  /poolearnings:
+    get:
+      tags:
+        - bot
+      summary: show pool earnings
+      description: >-
+        Return earning of your pool
+      operationId: poolearnings
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 1 Near
+  /whoandhowmuch:
+    get:
+      tags:
+        - bot
+      summary: show delegations by delegators
+      description: >-
+        Return delegations by delegators
+      operationId: whoandhowmuch
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '- nearukraineguild.near: 7.71 Near
+
+                - test1.near: 233.90 Near
+
+                - test.near: 4377.44 Near
+
+                - meta-pool-dao.near: 40154.77 Near
+
+                - apy-tracer.eco.linear-pro...: 0.00 Near
+
+                - operator.meta-pool.near: 0.10 Near
+
+                - test3.near: 2006.83 Near
+
+                - test2.near: 576.96 Near'
+  /stake:
+    get:
+      tags:
+        - bot
+      summary: show total stake
+      description: >-
+        Return total stake
+      operationId: stake
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'Your total stake is: 60000 Near'
+  /delegators:
+    get:
+      tags:
+        - bot
+      summary: show total delegators count
+      description: >-
+        Return total delegators count
+      operationId: delegators
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'Your delegators count is: 10'
