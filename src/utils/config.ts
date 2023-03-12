@@ -7,14 +7,14 @@ interface ConfigFields {
   channelId: string,
   accountId: string,
   poolId: string,
-  nodeMetricsUrl: string,
+  nodeUrl: string,
   cronTime: string,
 }
 
 const config = validateConfig();
 
 function validateConfig(): ConfigFields {
-  if (!process.env["BOT_TOKEN"] || !process.env["CHANNEL_ID"] || !process.env["POOL_ID"] || !process.env["ACCOUNT_ID"] || !process.env["NODE_METRICS_URL"]) {
+  if (!process.env["BOT_TOKEN"] || !process.env["CHANNEL_ID"] || !process.env["POOL_ID"] || !process.env["ACCOUNT_ID"] || !process.env["NODE_URL"]) {
     throw Error("Invalid .env file, please check fields");
   } else {
     return {
@@ -22,7 +22,7 @@ function validateConfig(): ConfigFields {
       channelId: process.env["CHANNEL_ID"],
       poolId: process.env["POOL_ID"],
       accountId: process.env["ACCOUNT_ID"],
-      nodeMetricsUrl: process.env["NODE_METRICS_URL"],
+      nodeUrl: process.env["NODE_URL"],
       cronTime: process.env["CRON_TIME"] ? process.env["CRON_TIME"] : "*/10 * * * *",
     }
   }

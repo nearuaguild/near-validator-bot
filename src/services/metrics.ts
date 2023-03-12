@@ -6,7 +6,7 @@ import config from "../utils/config";
 
 const denom: number = 1000000000000000000000000;
 
-const nodeMetricsURL = `${config.nodeMetricsUrl}/metrics`;
+const nodeMetricsURL = `${config.nodeUrl}/metrics`;
 
 interface MetricsState {
   delegatorsCount: number,
