@@ -102,10 +102,18 @@ Updated Fields:
 - Updated total stake: 47350 Near
 ```
 
-
 ### Available telegram bot commands
 
 Check [here](https://nearuaguild.github.io/near-validator-bot/#/)
+
+### TODO
+
+1. Add docker
+2. Add more commands
+3. Add database to subscribe to your bot directly from bot without setup your own
+4. Add Contribution rules
+
+Please if you see errors or have ideas, just create PR
 
 <!-- LICENSE -->
 
