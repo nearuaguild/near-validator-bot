@@ -112,6 +112,7 @@ Check [here](https://nearuaguild.github.io/near-validator-bot/#/)
 2. Add more commands
 3. Add database to subscribe to your bot directly from bot without setup your own
 4. Add Contribution rules
+5. Add version support
 
 Please if you see errors or have ideas, just create PR
 
