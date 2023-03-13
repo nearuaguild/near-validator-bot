@@ -69,7 +69,7 @@ class Bot {
           const resp = await this.metrics.getPoolEarnings()
 
           if (resp) {
-            await this.sendMessageChat(chatId, resp);
+            await this.sendMessageChat(chatId, resp + 'Near');
           }
         }
       });

@@ -72,10 +72,10 @@ class Metrics {
     if (poolDelegation) {
       const poolEarnings = (+poolDelegation.staked_balance / denom).toFixed(2);
       this.updatedData.poolEarnings = poolEarnings.toString().replace('.', '\\.');
-      return poolEarnings + ' Near';
+      return poolEarnings;
     }
 
-    return '0 Near';
+    return '0';
   }
 
   async getAll(): Promise<string> {
@@ -83,13 +83,11 @@ class Metrics {
 
     return `
 <b>Pool metrics:</b>
-
 1. Total Stake: ${totalStake} Near
 2. Delegators Count: ${delegatorsCount}
 3. Pool earnings: ${poolEarnings} Near
 
 <b>Node metrics:</b>
-
 1. Uptime: ${this.state.uptime}
 2. Chunks produced: ${this.state.chunksProduced}
 3. Chunks expected: ${this.state.chunksExpected}
