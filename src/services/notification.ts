@@ -24,7 +24,7 @@ export default class Notification {
 \\- Updated delegators count: ${updatedData.delegatorsCount}`
     }
 
-    if (updatedData.uptime && updatedData.chunksExpected != 0 && updatedData.peers) {
+    if (updatedData.uptime && updatedData.chunksExpected != 0) {
       updatedString = `${updatedString}
 \\- Uptime: ${updatedData.uptime}
 \\- Chunks produced: ${updatedData.chunksProduced} / Chunks expected: ${updatedData.chunksExpected}
@@ -36,9 +36,13 @@ export default class Notification {
 \\- Is node active: ${updatedData.isActive}`
     }
 
+    if (updatedData.poolEarnings) {
+      updatedString = `${updatedString}
+\\- Pool earnings: ${updatedData.poolEarnings} Near`
+    }
+
     if (updatedString.length > 0) {
-      updatedString = `*Updated Fields:*
-\\- Pool earnings: ${updatedData.poolEarnings} Near${updatedString}`
+      updatedString = `*Updated Fields:*${updatedString}`
 
       await this.bot.sendMessageChannel(updatedString);
     }

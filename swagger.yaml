@@ -77,21 +77,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: '- nearukraineguild.near: 7.71 Near
-
-                - test1.near: 233.90 Near
-
-                - test.near: 4377.44 Near
-
-                - meta-pool-dao.near: 40154.77 Near
-
-                - apy-tracer.eco.linear-pro...: 0.00 Near
-
-                - operator.meta-pool.near: 0.10 Near
-
-                - test3.near: 2006.83 Near
-
-                - test2.near: 576.96 Near'
+                example: 'https://nearscope.net/validator/nearuaguild.poolv1.near/tab/delegators'
   /stake:
     get:
       tags:

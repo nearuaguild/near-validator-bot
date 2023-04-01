@@ -3,6 +3,7 @@ import type { ValidatorContract } from "../utils/validatorContract";
 // @ts-ignore
 import parsePrometheusTextFormat from "parse-prometheus-text-format";
 import config from "../utils/config";
+import { getNetworkInfo } from "./rpcAPI";
 
 const denom: number = 1000000000000000000000000;
 
@@ -39,6 +40,7 @@ class Metrics {
 
   async getTotalStake(): Promise<number> {
     const delegators = await this.contract.getAccounts();
+
     const calcTotalStake = Math.floor(delegators.reduce((acc, delegator) => {
       const tokens: number = +delegator.staked_balance;
       acc += tokens;
@@ -65,13 +67,23 @@ class Metrics {
     return delegatorsCount;
   }
 
+  getDelegatorsLink() {
+    return `https://nearscope.net/validator/${config.poolId}/tab/delegators`
+  }
+
   async getPoolEarnings(): Promise<string> {
     const delegators = await this.contract.getAccounts();
     const poolDelegation = delegators.find((delegator => delegator.account_id === config.accountId));
 
     if (poolDelegation) {
       const poolEarnings = (+poolDelegation.staked_balance / denom).toFixed(2);
-      this.updatedData.poolEarnings = poolEarnings.toString().replace('.', '\\.');
+      const textPoolEarninngs = poolEarnings.toString().replace('.', '\\.');
+
+      if (this.state.poolEarnings !== textPoolEarninngs) {
+        this.state.poolEarnings = textPoolEarninngs;
+        this.updatedData.poolEarnings = textPoolEarninngs;
+      }
+
       return poolEarnings;
     }
 
@@ -96,17 +108,19 @@ class Metrics {
     `;
   }
 
-  async getDelegators(): Promise<string> {
-    const delegators = await this.contract.getAccounts();
+  async getPeers(): Promise<number> {
+    const networkInfo = await getNetworkInfo();
 
-    return delegators.reduce((acc, delegator) => {
-      const stake = (+delegator.staked_balance / denom).toFixed(2);
-      const name = delegator.account_id.length >= 25 ? delegator.account_id.slice(0, 25) + "..." : delegator.account_id;
+    if (networkInfo) {
+      const peers = networkInfo.result.num_active_peers;
 
-      acc += `- <b>${name}</b>: ${stake} Near \n`;
+      if (this.state.peers !== peers) {
+        this.state.peers = peers;
+        this.updatedData.peers = peers;
+      }
+    }
 
-      return acc;
-    }, ``);
+    return this.state.peers;
   }
 
   async getMetrics(): Promise<Partial<MetricsState>> {
@@ -148,26 +162,14 @@ class Metrics {
       this.updatedData.chunksExpected = chunksExpected;
     }
 
-    const uptime = this.state.chunksExpected === 0 ? this.state.uptime : this.state.chunksProduced / this.state.chunksExpected * 100 + '%';
+    const uptime = this.state.chunksExpected === 0 ? this.state.uptime : chunksProduced / chunksExpected * 100 + '%';
 
-    if (this.state.uptime !== uptime) {
+    if (this.state.uptime !== uptime && chunksExpected > 0) {
       this.state.uptime = uptime;
       this.updatedData.uptime = uptime;
     }
 
-    const peers = parsed
-      .find((obj: any) => obj.name === 'near_peer_connections_total').metrics[0].value;
-
-    if (!peers) {
-      console.log('peers', peers, parsed
-        .find((obj: any) => obj.name === 'near_peer_connections_total'), parsed
-        .find((obj: any) => obj.name === 'near_peer_connections_total').metrics)
-    }
-
-    if (this.state.peers !== peers) {
-      this.state.peers = peers;
-      this.updatedData.peers = peers;
-    }
+    await this.getPeers();
   }
 }
 

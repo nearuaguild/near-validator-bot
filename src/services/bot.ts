@@ -54,7 +54,7 @@ class Bot {
       this.bot.onText(/\/whoandhowmuch/, async (msg: Message, match: RegExpExecArray | null) => {
         const chatId = msg.chat.id;
         if (match) {
-          const resp = await this.metrics.getDelegators()
+          const resp = this.metrics.getDelegatorsLink()
 
           if (resp) {
             await this.sendMessageChat(chatId, resp);

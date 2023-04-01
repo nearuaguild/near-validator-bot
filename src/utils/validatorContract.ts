@@ -1,7 +1,7 @@
 import type BN from "bn.js";
 import { Account, Contract } from "near-api-js";
 
-export interface ChangeMethodOptions {
+interface ChangeMethodOptions {
   gas?: BN;
   attachedDeposit?: BN;
   walletMeta?: string;
